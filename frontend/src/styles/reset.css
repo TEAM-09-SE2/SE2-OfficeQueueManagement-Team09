@@ -1,0 +1,31 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  min-height: 100%;
+}
+
+*** Add File: c:\Users\rokir\Desktop\SE2-OfficeQueueManagement-Team09\frontend\src\styles\app.css
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  color: #222;
+}
+
+.app-shell {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+h1 {
+  margin-bottom: 0.75rem;
+}
+
+*** Add File: c:\Users\rokir\Desktop\SE2-OfficeQueueManagement-Team09\frontend\src\components\.gitkeep
