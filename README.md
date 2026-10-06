@@ -1,114 +1,141 @@
 # SE2 Office Queue Management (Team09)
 
-Struttura iniziale del progetto con:
+This repository contains the initial project scaffold for the Office Queue Management system.
 
-- Frontend: React + Vite + CSS classico
+The project is organized with a clear separation between frontend, backend, and supporting areas (shared code, docs, infrastructure, scripts).
+
+At this stage, the repository includes only the base structure and dependencies setup, with no business logic implemented yet.
+
+## Tech Stack
+
+- Frontend: React + Vite + classic CSS
 - Backend: Node.js + Express
 - Database: SQLite
 
-Obiettivo di questo commit iniziale: impostare solo lo scheletro del progetto e le dipendenze necessarie, senza implementare la logica applicativa.
-
-## Stack Tecnologico
-
-- Node.js (consigliato: versione LTS recente)
-- React (frontend)
-- Vite (tooling frontend)
-- Express (API backend)
-- SQLite (database locale)
-
-## Struttura Cartelle
+## Repository Structure
 
 ```text
 SE2-OfficeQueueManagement-Team09/
-|-- frontend/
-|   |-- index.html
-|   |-- package.json
-|   |-- vite.config.js
-|   `-- src/
-|       |-- App.jsx
-|       |-- main.jsx
-|       |-- components/
+|-- apps/
+|   |-- frontend/
+|   |   |-- index.html
+|   |   |-- package.json
+|   |   |-- vite.config.js
+|   |   `-- src/
+|   |       |-- App.jsx
+|   |       |-- main.jsx
+|   |       |-- components/
+|   |       |   `-- .gitkeep
+|   |       `-- styles/
+|   |           |-- app.css
+|   |           `-- reset.css
+|   `-- backend/
+|       |-- .env.example
+|       |-- package.json
+|       |-- data/
 |       |   `-- .gitkeep
-|       `-- styles/
-|           |-- app.css
-|           `-- reset.css
-|-- backend/
-|   |-- .env.example
-|   |-- package.json
-|   |-- data/
-|   |   `-- .gitkeep
-|   `-- src/
-|       |-- app.js
-|       |-- server.js
-|       |-- controllers/
-|       |   `-- .gitkeep
-|       |-- database/
-|       |   `-- connection.js
-|       |-- middlewares/
-|       |   `-- .gitkeep
-|       |-- routes/
-|       |   `-- .gitkeep
-|       `-- services/
+|       `-- src/
+|           |-- app.js
+|           |-- server.js
+|           |-- controllers/
+|           |   `-- .gitkeep
+|           |-- database/
+|           |   `-- connection.js
+|           |-- middlewares/
+|           |   `-- .gitkeep
+|           |-- routes/
+|           |   `-- .gitkeep
+|           `-- services/
+|               `-- .gitkeep
+|-- packages/
+|   `-- shared/
+|       |-- package.json
+|       |-- README.md
+|       `-- src/
+|           |-- index.js
 |           `-- .gitkeep
+|-- docs/
+|   |-- README.md
+|   `-- .gitkeep
+|-- infra/
+|   |-- README.md
+|   `-- .gitkeep
+|-- scripts/
+|   |-- README.md
+|   `-- .gitkeep
 |-- .gitignore
 `-- README.md
 ```
 
-## Setup Iniziale
+## Folder Responsibilities
 
-Eseguire dalla root del progetto.
+- Frontend app: `apps/frontend`
+- Backend app: `apps/backend`
+- Shared code area: `packages/shared`
+- Documentation: `docs`
+- Infrastructure and deployment files: `infra`
+- Workspace helper scripts: `scripts`
 
-### 1) Installazione dipendenze frontend
+## Prerequisites
+
+- Node.js (latest LTS recommended)
+- npm
+
+## Install Dependencies
+
+Run from the repository root.
+
+### 1) Frontend
 
 ```bash
-cd frontend
+cd apps/frontend
 npm install
 ```
 
-### 2) Installazione dipendenze backend
+### 2) Backend
 
 ```bash
 cd ../backend
 npm install
 ```
 
-## Avvio in locale
+## Run Locally
 
-Aprire due terminali separati.
+Use two separate terminals.
 
-### Terminale 1 - Backend
+### Terminal 1 - Backend
 
 ```bash
-cd backend
+cd apps/backend
 npm run dev
 ```
 
-Backend in ascolto su `http://localhost:4000`.
+Backend API runs on: `http://localhost:4000`
 
-### Terminale 2 - Frontend
+### Terminal 2 - Frontend
 
 ```bash
-cd frontend
+cd apps/frontend
 npm run dev
 ```
 
-Frontend disponibile su `http://localhost:5173`.
+Frontend runs on: `http://localhost:5173`
 
-## Note su configurazione
+## Available Scripts
 
-- Copiare `backend/.env.example` in `backend/.env` per configurazioni locali.
-- Il file SQLite verra` creato in `backend/data/` quando si inizializzera` la parte database.
-- La cartella contiene solo base setup e placeholder: nessuna feature applicativa e` ancora implementata.
+### Frontend (`apps/frontend`)
 
-## Script Disponibili
+- `npm run dev` starts Vite in development mode
+- `npm run build` creates a production build
+- `npm run preview` previews the production build
 
-### Frontend
+### Backend (`apps/backend`)
 
-- `npm run dev` avvia Vite in sviluppo
-- `npm run build` crea la build produzione
-- `npm run preview` anteprima build
+- `npm run dev` starts Express with nodemon
+- `npm start` starts Express with node
 
-### Backend
+## Environment Notes
 
-- `npm run dev` avvia Express con nodemon
-- `npm start` avvia Express con node
+- Create `apps/backend/.env` from `apps/backend/.env.example` for local configuration.
+- The SQLite database file will be created under `apps/backend/data/` when the database layer is initialized.
+- This repository currently contains only the scaffold and setup files.
