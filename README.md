@@ -139,3 +139,31 @@ Frontend runs on: `http://localhost:5173`
 - Create `apps/backend/.env` from `apps/backend/.env.example` for local configuration.
 - The SQLite database file will be created under `apps/backend/data/` when the database layer is initialized.
 - This repository currently contains only the scaffold and setup files.
+
+## Figma Prototype Documentation
+
+The visual prototype for this project is available in the `figmaPrototype` folder.
+
+- Full documentation: [figmaPrototype/README.md](figmaPrototype/README.md)
+- Prototype assets: [figmaPrototype](figmaPrototype)
+
+### Quick Preview
+
+Operator dashboard reference screen:
+
+![Operator dashboard](figmaPrototype/1a.jpeg)
+
+### Validation Summary
+
+The prototype is valid as a strong visual and UX baseline for the MVP.
+
+- Good visual hierarchy and clear information architecture
+- Consistent component language across operator, kiosk, public display, and admin views
+- Good flow coverage for core queue-management operations
+- Real-time metrics and status indicators are clearly represented
+
+Before implementation, it is recommended to finalize:
+
+- Mobile and tablet responsive variants
+- Accessibility constraints (contrast, focus states, minimum font sizes)
+- Clean exports without editor overlays for final handoff
