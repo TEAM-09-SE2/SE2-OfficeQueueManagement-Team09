@@ -44,6 +44,7 @@ Recommended refinements before final design handoff:
 | [2c.jpeg](2c.jpeg) | Smart features + KPI | Value proof points and metrics |
 | [2d.jpeg](2d.jpeg) | Testimonial + CTA + footer | Trust section and final conversion block |
 | [3.jpeg](3.jpeg) | Kiosk | Service selection and on-site accessibility |
+| [kiosk-get-ticket-concept.svg](kiosk-get-ticket-concept.svg) | Kiosk Get Ticket (concept) | Poste-style self-service ticket experience |
 | [4.jpeg](4.jpeg) | Public Display | Live queue call board in waiting area |
 | [5.jpeg](5.jpeg) | Admin Dashboard | Performance and staff monitoring |
 
@@ -89,12 +90,17 @@ Recommendations:
 ### 3) Kiosk (End User)
 
 ![Kiosk screen](3.jpeg)
+![Kiosk Get Ticket concept](kiosk-get-ticket-concept.svg)
 
 Observations:
 
 - Simple screen, suitable for fast in-person interaction
 - Service categories are visually distinct
 - Language switch and accessibility mode are strong additions
+
+Concept note:
+
+- The generated "Get Ticket" concept adds a clearer poste-style flow: 3 service options, instant ticket print, and explicit connection to the public display queue.
 
 Recommendations:
 
