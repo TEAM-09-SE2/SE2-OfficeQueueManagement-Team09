@@ -1,71 +1,71 @@
 # Figma Prototype
 
-Questa cartella contiene la documentazione visiva del prototipo QueueFlow.
+This folder contains the visual documentation for the QueueFlow prototype.
 
-## Obiettivo del prototipo
+## Prototype Goal
 
-Il prototipo serve a validare la UX del sistema di gestione code prima della fase di sviluppo.
-Copre i principali punti di contatto:
+The prototype validates the queue-management UX before implementation.
+It covers the main touchpoints:
 
-- Landing e presentazione prodotto
-- Kiosk per emissione ticket
-- Dashboard operatore allo sportello
-- Public display per le chiamate
-- Dashboard amministrativa per monitoraggio e report
+- Landing and product presentation
+- Ticket kiosk flow
+- Operator counter dashboard
+- Public display board for live calls
+- Admin dashboard for monitoring and reporting
 
-## Valutazione rapida
+## Quick Evaluation
 
-Il prototipo e valido come base MVP.
+The prototype is solid and ready to be used as an MVP UI baseline.
 
-Punti forti:
+Strengths:
 
-- Gerarchia visiva molto chiara nelle schermate operative
-- Identita grafica coerente tra tutte le viste
-- Buona leggibilita delle informazioni critiche (ticket, tempi, priorita)
-- Copertura quasi completa dei flussi core del dominio
+- Clear visual hierarchy in operational screens
+- Consistent design language across all views
+- Good readability for critical information (ticket ID, wait times, priorities)
+- Strong coverage of core domain flows
 
-Punti da rifinire prima dell handoff finale a sviluppo:
+Recommended refinements before final design handoff:
 
-- Esportare frame puliti senza overlay del tool di design
-- Definire varianti responsive per tablet e mobile
-- Consolidare regole di accessibilita (contrasto, focus keyboard, font minimi)
-- Definire token UI espliciti (spaziature, radius, colori semantici)
+- Export clean frames without editor overlays
+- Define responsive variants for tablet and mobile
+- Consolidate accessibility rules (contrast, keyboard focus, minimum font sizes)
+- Define explicit UI tokens (spacing, radius, semantic colors)
 
-## Mappa schermate
+## Screen Map
 
-| File | Schermata | Obiettivo |
+| File | Screen | Purpose |
 | --- | --- | --- |
-| [1.jpeg](1.jpeg) | Counter Dashboard (overview) | Vista operatore con ticket attivo e KPI |
-| [1a.jpeg](1a.jpeg) | Counter Dashboard (full frame) | Layout completo della postazione operatore |
-| [1b.jpeg](1b.jpeg) | Upcoming Priority Queue (detail) | Lista ticket con priorita e tempi |
-| [2.jpeg](2.jpeg) | Landing page (full) | Vista marketing completa |
-| [2a.jpeg](2a.jpeg) | Landing hero | Posizionamento prodotto e CTA principali |
-| [2b.jpeg](2b.jpeg) | How it works | Spiegazione in tre passi |
-| [2c.jpeg](2c.jpeg) | Smart features + KPI | Proof points e vantaggi operativi |
-| [2d.jpeg](2d.jpeg) | Testimonial + CTA + footer | Conversione finale e fiducia |
-| [3.jpeg](3.jpeg) | Kiosk | Selezione servizio e accessibilita locale |
-| [4.jpeg](4.jpeg) | Public Display | Chiamata ticket in sala attesa |
-| [5.jpeg](5.jpeg) | Admin Dashboard | Monitoraggio performance e staff |
+| [1.jpeg](1.jpeg) | Counter Dashboard (overview) | Operator view with active ticket and KPI cards |
+| [1a.jpeg](1a.jpeg) | Counter Dashboard (full frame) | Complete workstation layout |
+| [1b.jpeg](1b.jpeg) | Upcoming Priority Queue (detail) | Priority queue list with timing indicators |
+| [2.jpeg](2.jpeg) | Landing page (full) | Full marketing page preview |
+| [2a.jpeg](2a.jpeg) | Landing hero | Product positioning and main CTAs |
+| [2b.jpeg](2b.jpeg) | How it works | Three-step process explanation |
+| [2c.jpeg](2c.jpeg) | Smart features + KPI | Value proof points and metrics |
+| [2d.jpeg](2d.jpeg) | Testimonial + CTA + footer | Trust section and final conversion block |
+| [3.jpeg](3.jpeg) | Kiosk | Service selection and on-site accessibility |
+| [4.jpeg](4.jpeg) | Public Display | Live queue call board in waiting area |
+| [5.jpeg](5.jpeg) | Admin Dashboard | Performance and staff monitoring |
 
-## Galleria e analisi per area
+## Gallery and Review by Area
 
-### 1) Counter Dashboard (Operatore)
+### 1) Counter Dashboard (Operator)
 
 ![Counter dashboard full](1a.jpeg)
 ![Counter dashboard detail](1.jpeg)
 ![Priority queue detail](1b.jpeg)
 
-Osservazioni:
+Observations:
 
-- Il blocco ticket attivo e immediatamente riconoscibile
-- Le azioni primarie (Complete, Next Ticket) sono ben separate
-- La tabella delle code prioritarie supporta bene il triage operativo
-- La sidebar garantisce navigazione stabile e prevedibile
+- The active ticket area is immediately recognizable
+- Primary actions (Complete, Next Ticket) are clearly separated
+- The priority list supports fast operational triage
+- Sidebar navigation is stable and predictable
 
-Raccomandazioni:
+Recommendations:
 
-- Aggiungere stati espliciti per errori e fallback rete
-- Definire microcopy di conferma per azioni irreversibili
+- Add explicit error and network fallback states
+- Define confirmation microcopy for irreversible actions
 
 ### 2) Landing Page
 
@@ -75,92 +75,92 @@ Raccomandazioni:
 ![Features and KPI section](2c.jpeg)
 ![Testimonial and CTA section](2d.jpeg)
 
-Osservazioni:
+Observations:
 
-- Buon equilibrio tra messaggio business e credibilita numerica
-- Struttura narrativa chiara: Hero -> Processo -> Benefici -> Social proof -> CTA
-- Estetica coerente con prodotto operativo interno
+- Good balance between product value and quantitative credibility
+- Clear narrative flow: Hero -> Process -> Benefits -> Social proof -> CTA
+- Aesthetic consistency with internal operational product screens
 
-Raccomandazioni:
+Recommendations:
 
-- Rafforzare contrasto di alcuni testi secondari
-- Preparare versione mobile con priorita delle sezioni
+- Increase contrast for some secondary text elements
+- Prepare a mobile-first content priority version
 
-### 3) Kiosk (Utente finale)
+### 3) Kiosk (End User)
 
 ![Kiosk screen](3.jpeg)
 
-Osservazioni:
+Observations:
 
-- Schermata semplice e adatta a interazione veloce in presenza
-- Buona distinzione visiva tra categorie di servizio
-- Presenza di lingua e modalita accessibilita e un punto positivo
+- Simple screen, suitable for fast in-person interaction
+- Service categories are visually distinct
+- Language switch and accessibility mode are strong additions
 
-Raccomandazioni:
+Recommendations:
 
-- Aumentare ancora la dimensione touch target per contesti ad alta affluenza
-- Esplicitare stato di inattivita e reset automatico sessione
+- Increase touch target size for high-traffic environments
+- Define idle timeout and automatic session reset behavior
 
 ### 4) Public Display
 
 ![Public display](4.jpeg)
 
-Osservazioni:
+Observations:
 
-- Ticket corrente e banco di destinazione sono evidenziati correttamente
-- Sezioni Recent Calls e Up Next migliorano la prevedibilita per gli utenti
-- Buona composizione per visualizzazione a distanza
+- Current ticket and destination counter are clearly emphasized
+- Recent Calls and Up Next improve predictability for visitors
+- Composition is appropriate for distance viewing
 
-Raccomandazioni:
+Recommendations:
 
-- Verificare leggibilita da diversi metri su monitor reali
-- Definire palette ad alto contrasto per ambienti luminosi
+- Validate readability from multiple real-world distances
+- Define a high-contrast palette option for bright environments
 
 ### 5) Admin Dashboard
 
 ![Admin dashboard](5.jpeg)
 
-Osservazioni:
+Observations:
 
-- KPI principali e distribuzione code sono chiari e ben bilanciati
-- La sezione Staff Efficiency e utile per governance operativa
-- Struttura adatta a confronto giornaliero e settimanale
+- Main KPIs and queue distribution are clear and balanced
+- Staff Efficiency section supports operational governance
+- Layout works well for daily and weekly performance reviews
 
-Raccomandazioni:
+Recommendations:
 
-- Aggiungere filtri rapidi per sede, fascia oraria e servizio
-- Definire esportazioni dati coerenti con reportistica backend
+- Add quick filters for branch, time window, and service category
+- Define exports aligned with backend reporting requirements
 
-## Copertura dei flussi core
+## Core Flow Coverage
 
-Il prototipo copre i flussi essenziali del sistema:
+The prototype covers the essential system flows:
 
-1. Acquisizione ticket al kiosk
-2. Visualizzazione e chiamata ticket su public display
-3. Gestione pratica allo sportello operatore
-4. Monitoraggio KPI e performance lato admin
-5. Presentazione commerciale del prodotto lato landing
+1. Ticket acquisition at kiosk
+2. Queue calling and visibility on public display
+3. Ticket handling at operator counter
+4. KPI and staff performance monitoring in admin panel
+5. Product communication through landing page
 
-## Indicazioni per implementazione frontend
+## Frontend Implementation Guidance
 
-Linee guida consigliate per trasformare il prototipo in UI reale:
+Recommended guidelines to translate the prototype into production UI:
 
-1. Definire un design token set unico (colori, spacing, typo, shadows, radius)
-2. Creare componenti base riusabili (Button, Card, Badge, Table, MetricTile)
-3. Modellare stati standard (default, loading, empty, error, disabled)
-4. Validare accessibilita WCAG sulle pagine operative
-5. Stabilire breakpoints e comportamento responsive per ogni vista
+1. Define a shared design token set (colors, spacing, typography, shadows, radius)
+2. Build reusable base components (Button, Card, Badge, Table, MetricTile)
+3. Model standard states (default, loading, empty, error, disabled)
+4. Validate WCAG accessibility for operational pages
+5. Define breakpoints and responsive behavior for each view
 
-## Checklist handoff design -> sviluppo
+## Design-to-Development Handoff Checklist
 
-- [ ] Export immagini finali pulite e ritagliate per documentazione
-- [ ] Raccolta font, pesi e fallback web-safe
-- [ ] Specifica colori semantici (success, warning, error, info)
-- [ ] Specifica griglia e spacing scale
-- [ ] Regole di comportamento per hover, focus, active, disabled
-- [ ] Priorita MVP per sviluppo incrementale delle schermate
+- [ ] Export final clean images for documentation
+- [ ] Collect fonts, weights, and web-safe fallbacks
+- [ ] Define semantic colors (success, warning, error, info)
+- [ ] Define grid and spacing scale
+- [ ] Specify hover, focus, active, and disabled behaviors
+- [ ] Prioritize MVP implementation order for screens
 
-## Conclusione
+## Conclusion
 
-Il prototipo e complessivamente molto valido: e coerente, leggibile e orientato a task reali.
-Con i piccoli affinamenti sopra, puo diventare una base eccellente per passare alla fase di sviluppo UI/UX e integrazione funzionale.
+The prototype is strong overall: coherent, readable, and task-oriented.
+With the refinements above, it can serve as an excellent foundation for UI implementation and functional integration.
