@@ -34,178 +34,706 @@ flowchart LR
 - `database/`: connection and SQL repository functions
 - `middlewares/`: error handling, request validation, logging
 
-## 4. API Design Notes
+## 4. API Design (per story)
 
-The endpoint set you proposed is coherent for MVP and maps well to the stories.
-Main consistency recommendations:
+### Get a ticket
 
-- Keep naming consistent (`service_id`, `counter_id`, `issued_at`, etc.).
-- Keep semantic clarity on timestamps:
-  - `issued_at`: when the ticket is created.
-  - `called_at`: when a counter calls the ticket.
-  - `completed_at` (optional but recommended): when service actually finishes.
-- Keep `POST /api/counters/{id}/next` idempotency behavior clear:
-  - if no waiting ticket for services assigned to counter -> `204 No Content`.
+- **GET /api/services**: returns all the services.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    [
+      {
+        "id": 1,
+        "name": "shipping",
+        "processing_time": 5,
+        "counter_list": [1, 2]
+      },
+      {
+        "id": 2,
+        "name": "accounts",
+        "processing_time": 3,
+        "counter_list": [1]
+      }
+    ]
+    ```
+  - **Error Responses**:
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while retrieving services."
+        }
+      }
+      ```
 
-## 5. Data Model
+- **POST /api/tickets**: create a new ticket for the selected service.
+  - **Request Body**:
+    ```json
+    {
+      "id_service": 1
+    }
+    ```
+  - **Response (201 Created)**:
+    ```json
+    {
+      "id": 1,
+      "code": "A101",
+      "id_service": 1,
+      "id_counter": null,
+      "issue_at": "2026-10-08T09:30:00Z",
+      "served_at": null,
+      "status": "WAITING"
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid input: id_service must be a valid integer."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "SERVICE_NOT_FOUND",
+          "message": "Service not found."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while creating the ticket."
+        }
+      }
+      ```
 
-## 5.1 Core Tables
+### Next customer
 
-```sql
-CREATE TABLE services (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
-  requested_time INTEGER NOT NULL CHECK (requested_time > 0),
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
+- **POST /api/counters/{id}/next**: returns the next ticket code that will be served.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    {
+      "id": 1,
+      "code": "A101",
+      "id_service": 1,
+      "id_counter": 1,
+      "issue_at": "2026-10-08T09:30:00Z",
+      "served_at": "2026-10-08T09:45:00Z",
+      "status": "SERVED"
+    }
+    ```
+  - **Response (204 No Content)**:
+    *(No response body returned if all queues served by the counter are empty)*
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid counter ID supplied."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to perform this action."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "COUNTER_NOT_FOUND",
+          "message": "Counter not found."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while calling the next ticket."
+        }
+      }
+      ```
 
-CREATE TABLE counters (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL UNIQUE,
-  created_at TEXT NOT NULL DEFAULT (datetime('now')),
-  updated_at TEXT NOT NULL DEFAULT (datetime('now'))
-);
+### Call customer
 
-CREATE TABLE counters_services (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  counter_id INTEGER NOT NULL,
-  service_id INTEGER NOT NULL,
-  FOREIGN KEY (counter_id) REFERENCES counters(id) ON DELETE CASCADE,
-  FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE RESTRICT,
-  UNIQUE (counter_id, service_id)
-);
+- **GET /api/counters/current**: returns the current served ticket code for each counter.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    [
+      {
+        "id_counter": 1,
+        "ticket_code": "A101",
+        "service_name": "shipping"
+      },
+      {
+        "id_counter": 2,
+        "ticket_code": null,
+        "service_name": null
+      }
+    ]
+    ```
+  - **Error Responses**:
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while retrieving current counter status."
+        }
+      }
+      ```
 
-CREATE TABLE tickets (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  service_id INTEGER NOT NULL,
-  counter_id INTEGER,
-  status TEXT NOT NULL DEFAULT 'WAITING'
-    CHECK (status IN ('WAITING', 'CALLED', 'COMPLETED', 'CANCELLED')),
-  issued_at TEXT NOT NULL DEFAULT (datetime('now')),
-  called_at TEXT,
-  completed_at TEXT,
-  FOREIGN KEY (service_id) REFERENCES services(id) ON DELETE RESTRICT,
-  FOREIGN KEY (counter_id) REFERENCES counters(id) ON DELETE SET NULL
-);
-```
+### View queue lengths
 
-## 5.2 Answer to "Does `tickets: id_service, id_counter, issue_at, served_at` make sense?"
+- **GET /api/queues**: returns the current queue length (number of waiting customers) for each service type to be displayed on the main board.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    [
+      {
+        "id_service": 1,
+        "service_name": "shipping",
+        "queue_length": 4
+      },
+      {
+        "id_service": 2,
+        "service_name": "accounts",
+        "queue_length": 0
+      }
+    ]
+    ```
+  - **Error Responses**:
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while retrieving queue lengths."
+        }
+      }
+      ```
 
-Yes, it mostly makes sense.
+### See stats
 
-Recommended adjustment:
+- **GET /api/stats?period={daily|weekly|monthly}&date={YYYY-MM-DD}**: returns the statistics for the specified period.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    {
+      "period": "daily",
+      "date": "2026-10-08",
+      "services_stats": [
+        {
+          "id_service": 1,
+          "service_name": "shipping",
+          "customers_served": 45
+        },
+        {
+          "id_service": 2,
+          "service_name": "accounts",
+          "customers_served": 30
+        }
+      ],
+      "counters_stats": [
+        {
+          "id_counter": 1,
+          "counter_number": 1,
+          "served_by_service": [
+            {
+              "id_service": 1,
+              "service_name": "shipping",
+              "customers_served": 25
+            },
+            {
+              "id_service": 2,
+              "service_name": "accounts",
+              "customers_served": 15
+            }
+          ]
+        }
+      ]
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid query parameters: period must be 'daily', 'weekly', or 'monthly', and date must be formatted as YYYY-MM-DD."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to access statistics."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while compiling statistics."
+        }
+      }
+      ```
 
-- Keep `service_id` and nullable `counter_id` exactly as you proposed.
-- Rename `served_at` to `called_at` for precision (the `next` operation is a call event).
-- Add `completed_at` if you need real "customer served" completion tracking.
-- Add a `status` column to avoid ambiguous interpretation of NULL timestamps.
+### Config counters
 
-Without `status`, nullability rules become harder to reason about and statistics are less reliable.
+- **POST /api/queues/reset**: resets all the queues.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    {
+      "message": "All queues have been successfully reset."
+    }
+    ```
+  - **Error Responses**:
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to reset queues."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while resetting queues."
+        }
+      }
+      ```
 
-## 5.3 Useful Indexes
+- **GET /api/counters**: returns all the counters.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    [
+      {
+        "id": 1,
+        "number": 1,
+        "services": [1, 2]
+      },
+      {
+        "id": 2,
+        "number": 2,
+        "services": [1]
+      }
+    ]
+    ```
+  - **Error Responses**:
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to view configuration."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while fetching counters."
+        }
+      }
+      ```
 
-```sql
-CREATE INDEX idx_tickets_waiting_by_service
-  ON tickets(service_id, status, issued_at);
+- **POST /api/counters**: creates a new counter.
+  - **Request Body**:
+    ```json
+    {
+      "number": 3,
+      "services": [1, 2]
+    }
+    ```
+  - **Response (201 Created)**:
+    ```json
+    {
+      "id": 3,
+      "number": 3,
+      "services": [1, 2]
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid counter data: number is required and services must be a list of existing service IDs."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to create a counter."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while creating the counter."
+        }
+      }
+      ```
 
-CREATE INDEX idx_tickets_called_by_counter
-  ON tickets(counter_id, status, called_at);
+- **PUT /api/counters/{id}**: update a specific counter.
+  - **Request Body**:
+    ```json
+    {
+      "number": 1,
+      "services": [2]
+    }
+    ```
+  - **Response (200 OK)**:
+    ```json
+    {
+      "id": 1,
+      "number": 1,
+      "services": [2]
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid counter data or format provided."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to update a counter."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "COUNTER_NOT_FOUND",
+          "message": "Counter not found."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while updating the counter."
+        }
+      }
+      ```
 
-CREATE INDEX idx_tickets_issued_at
-  ON tickets(issued_at);
-```
+- **DELETE /api/counters/{id}**: delete a specific counter.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    {
+      "message": "Counter 1 successfully deleted."
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid counter ID supplied."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to delete a counter."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "COUNTER_NOT_FOUND",
+          "message": "Counter not found."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while deleting the counter."
+        }
+      }
+      ```
 
-## 6. Story-to-Endpoint Mapping
+- **GET /api/services**: returns all the services (already in **get ticket** story).
+  - *(Refer to "Get a ticket" story)*
 
-- Get a ticket
-  - `GET /api/services`
-  - `POST /api/tickets`
-- Next customer
-  - `POST /api/counters/{id}/next`
-- Call customer / public board
-  - `GET /api/counters/current`
-- View queue lengths
-  - `GET /api/queues`
-- Stats
-  - `GET /api/stats?period={daily|weekly|monthly}&date={YYYY-MM-DD}`
-- Config counters/services
-  - `POST /api/queues/reset`
-  - `GET/POST/PUT/DELETE /api/counters`
-  - `GET/POST/PUT/DELETE /api/services`
-- Estimated waiting time
-  - `GET /api/tickets/{id}/waiting-time`
+- **POST /api/services**: creates a new service.
+  - **Request Body**:
+    ```json
+    {
+      "name": "packages",
+      "processing_time": 10
+    }
+    ```
+  - **Response (201 Created)**:
+    ```json
+    {
+      "id": 3,
+      "name": "packages",
+      "processing_time": 10,
+      "counter_list": []
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid service data: name must be a non-empty string and processing_time must be a positive integer."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to create a service."
+        }
+      }
+      ```
+    - **409 Conflict**:
+      ```json
+      {
+        "error": {
+          "code": "CONFLICT",
+          "message": "A service with this name already exists."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while creating the service."
+        }
+      }
+      ```
 
-Note: if you truly want `{code}` instead of DB id, add a dedicated `ticket_code` column.
+- **PUT /api/services/{id}**: update a specific service.
+  - **Request Body**:
+    ```json
+    {
+      "name": "shipping express",
+      "processing_time": 4
+    }
+    ```
+  - **Response (200 OK)**:
+    ```json
+    {
+      "id": 1,
+      "name": "shipping express",
+      "processing_time": 4,
+      "counter_list": [1, 2]
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid service payload provided."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to update a service."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "SERVICE_NOT_FOUND",
+          "message": "Service not found."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while updating the service."
+        }
+      }
+      ```
 
-## 7. Critical Business Flows
+- **DELETE /api/services/{id}**: delete a specific service.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    {
+      "message": "Service 1 successfully deleted."
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid service ID supplied."
+        }
+      }
+      ```
+    - **401 Unauthorized**:
+      ```json
+      {
+        "error": {
+          "code": "UNAUTHORIZED",
+          "message": "Authentication required to delete a service."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "SERVICE_NOT_FOUND",
+          "message": "Service not found."
+        }
+      }
+      ```
+    - **409 Conflict**:
+      ```json
+      {
+        "error": {
+          "code": "CONFLICT",
+          "message": "Cannot delete service: service is currently assigned to one or more counters."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while deleting the service."
+        }
+      }
+      ```
 
-## 7.1 Create ticket
+### Get estimated time
 
-1. Validate `service_id` exists.
-2. Insert ticket with `status='WAITING'` and `issued_at=now`.
-3. Return created ticket (`201`).
+- **GET /api/tickets/{code}/waiting-time**: returns the estimated waiting time.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    {
+      "ticket_code": "A101",
+      "id_service": 1,
+      "people_in_queue": 4,
+      "estimated_waiting_time_minutes": 15.83
+    }
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid ticket code parameter."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "TICKET_NOT_FOUND",
+          "message": "Ticket not found."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while calculating waiting time."
+        }
+      }
+      ```
 
-## 7.2 Call next ticket (`POST /api/counters/{id}/next`)
+### Notify customer served
 
-Run inside one DB transaction:
+- **POST /api/counters/{id}/next**: returns the next ticket code that will be served. (already in **next customer** story)
+  - *(Refer to "Next customer" story)*
 
-1. Verify counter exists.
-2. Read services assigned to counter from `counters_services`.
-3. Select oldest waiting ticket for those services.
-4. If no rows -> `204`.
-5. Update selected ticket:
-   - `counter_id = {id}`
-   - `status = 'CALLED'`
-   - `called_at = now`
-6. Return updated ticket (`200`).
+## 5. DB schema
 
-This transactional pattern avoids race conditions when two operators call next almost simultaneously.
-
-## 8. Queue Length and ETA Rules
-
-## 8.1 Queue length
-
-For each service:
-
-- queue length = count of tickets where `status='WAITING'` and `service_id = X`.
-
-## 8.2 Estimated waiting time
-
-For ticket T:
-
-- `people_in_queue` = waiting tickets of same service issued before T.
-- `active_counters_for_service` = counters assigned to that service.
-- `avg_service_time` = `services.requested_time`.
-
-Suggested formula:
-
-$$
-ETA_{minutes} = \frac{people\_in\_queue + 1}{\max(active\_counters\_for\_service, 1)} \times avg\_service\_time
-$$
-
-## 9. Error Contract (Recommended)
-
-Current payloads are already valid. For long-term consistency, consider this shape:
-
-```json
-{
-  "error": {
-    "code": "COUNTER_NOT_FOUND",
-    "message": "Counter not found."
-  }
-}
-```
-
-This simplifies frontend logic and localization.
-
-## 10. Optional Enhancements
-
-- Add `ticket_events` table for audit and richer analytics.
-- Add soft-delete (`is_active`) for services/counters instead of hard delete.
-- Add optimistic lock/version on tickets if concurrency grows.
-
-## 11. MVP Verdict
-
-Your API set is well-structured for the stories.
-The only major refinement is to make ticket lifecycle explicit (`status`, `called_at`, optional `completed_at`), which resolves ambiguity and improves stats accuracy.
+- counters: **id**, number
+- services: **id**, name, processing_time
+- counters_services: **id**, *id_counter*, *id_service*
+- tickets: **id**, code, *id_service*, *id_counter*, issue_at, served_at, status  
+  Note: status can be WAITING or SERVED
+- users: **id**, username, type, password, salt
