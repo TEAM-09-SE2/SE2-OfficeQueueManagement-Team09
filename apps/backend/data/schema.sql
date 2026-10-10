@@ -16,6 +16,9 @@ CREATE TABLE "services" (
     "id" INTEGER,
     "name" TEXT NOT NULL UNIQUE,
     "processing_time" NUMERIC NOT NULL,
+    "code" TEXT NOT NULL UNIQUE,
+    "current_number" INTEGER DEFAULT 0,
+    "last_ticket_date" TEXT DEFAULT (CURRENT_DATE) ,
     PRIMARY KEY("id" AUTOINCREMENT)
 );
 
