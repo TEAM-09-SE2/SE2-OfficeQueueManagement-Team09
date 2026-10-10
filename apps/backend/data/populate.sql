@@ -44,9 +44,9 @@ INSERT INTO counters_services (id_counter, id_service) VALUES (6, 1);
 INSERT INTO counters_services (id_counter, id_service) VALUES (6, 9);
 
 -- 4. Insert 60 Tickets
--- (40 SERVED tickets with assigned counter and served_at timestamp, 20 WAITING tickets)
+-- (40 SERVED tickets, 5 SERVING tickets currently at counters, 15 WAITING tickets)
 
--- 40 Served Tickets
+-- 40 Served Tickets (served_at indica il momento della presa in carico allo sportello)
 INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
 (1, 1, 1, 'A101', 'SERVED', '2026-10-08T08:30:00Z', '2026-10-08T08:32:10Z'),
 (2, 2, 4, 'B101', 'SERVED', '2026-10-08T08:31:00Z', '2026-10-08T08:35:00Z'),
@@ -89,25 +89,28 @@ INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_
 (39, 1, 7, 'I103', 'SERVED', '2026-10-08T11:00:00Z', '2026-10-08T11:08:00Z'),
 (40, 4, 8, 'E106', 'SERVED', '2026-10-08T11:05:00Z', '2026-10-08T11:11:20Z');
 
--- 20 Waiting Tickets
+-- 5 Serving Tickets (served_at valorizzato al momento della chiamata allo sportello)
 INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
-(41, NULL, 1, 'A107', 'WAITING', '2026-10-09T11:10:00Z', NULL),
-(42, NULL, 1, 'A108', 'WAITING', '2026-10-09T11:12:00Z', NULL),
-(43, NULL, 2, 'C104', 'WAITING', '2026-10-09T11:15:00Z', NULL),
-(44, NULL, 3, 'F104', 'WAITING', '2026-10-09T11:18:00Z', NULL),
-(45, NULL, 4, 'B107', 'WAITING', '2026-10-09T11:20:00Z', NULL),
-(46, NULL, 4, 'B108', 'WAITING', '2026-10-09T11:21:00Z', NULL),
-(47, NULL, 5, 'D104', 'WAITING', '2026-10-09T11:22:00Z', NULL),
-(48, NULL, 6, 'H104', 'WAITING', '2026-10-09T11:23:00Z', NULL),
-(49, NULL, 7, 'I104', 'WAITING', '2026-10-09T11:24:00Z', NULL),
-(50, NULL, 8, 'E107', 'WAITING', '2026-10-09T11:25:00Z', NULL),
-(51, NULL, 9, 'G108', 'WAITING', '2026-10-09T11:26:00Z', NULL),
-(52, NULL, 10, 'J101', 'WAITING', '2026-10-09T11:27:00Z', NULL),
-(53, NULL, 10, 'J102', 'WAITING', '2026-10-09T11:28:00Z', NULL),
-(54, NULL, 1, 'A109', 'WAITING', '2026-10-09T11:29:00Z', NULL),
-(55, NULL, 2, 'C105', 'WAITING', '2026-10-09T11:30:00Z', NULL),
-(56, NULL, 3, 'F105', 'WAITING', '2026-10-09T11:31:00Z', NULL),
-(57, NULL, 5, 'D105', 'WAITING', '2026-10-09T11:32:00Z', NULL),
-(58, NULL, 7, 'I105', 'WAITING', '2026-10-09T11:33:00Z', NULL),
-(59, NULL, 8, 'E108', 'WAITING', '2026-10-09T11:34:00Z', NULL),
-(60, NULL, 9, 'G109', 'WAITING', '2026-10-09T11:35:00Z', NULL);
+(41, 1, 1, 'A107', 'SERVING', '2026-10-10T10:45:00Z', '2026-10-10T11:00:00Z'),
+(42, 2, 4, 'B107', 'SERVING', '2026-10-10T10:50:00Z', '2026-10-10T11:02:15Z'),
+(43, 3, 5, 'D104', 'SERVING', '2026-10-10T10:52:00Z', '2026-10-10T11:05:30Z'),
+(44, 4, 8, 'E107', 'SERVING', '2026-10-10T10:55:00Z', '2026-10-10T11:08:00Z'),
+(45, 6, 9, 'G108', 'SERVING', '2026-10-10T10:58:00Z', '2026-10-10T11:10:45Z');
+
+-- 15 Waiting Tickets (served_at rimane NULL)
+INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
+(46, NULL, 1, 'A108', 'WAITING', '2026-10-10T11:00:00Z', NULL),
+(47, NULL, 2, 'C104', 'WAITING', '2026-10-10T11:01:00Z', NULL),
+(48, NULL, 3, 'F104', 'WAITING', '2026-10-10T11:03:00Z', NULL),
+(49, NULL, 4, 'B108', 'WAITING', '2026-10-10T11:05:00Z', NULL),
+(50, NULL, 6, 'H104', 'WAITING', '2026-10-10T11:06:00Z', NULL),
+(51, NULL, 7, 'I104', 'WAITING', '2026-10-10T11:08:00Z', NULL),
+(52, NULL, 9, 'G109', 'WAITING', '2026-10-10T11:09:00Z', NULL),
+(53, NULL, 10, 'J101', 'WAITING', '2026-10-10T11:10:00Z', NULL),
+(54, NULL, 10, 'J102', 'WAITING', '2026-10-10T11:11:00Z', NULL),
+(55, NULL, 1, 'A109', 'WAITING', '2026-10-10T11:12:00Z', NULL),
+(56, NULL, 2, 'C105', 'WAITING', '2026-10-10T11:13:00Z', NULL),
+(57, NULL, 3, 'F105', 'WAITING', '2026-10-10T11:14:00Z', NULL),
+(58, NULL, 5, 'D105', 'WAITING', '2026-10-10T11:15:00Z', NULL),
+(59, NULL, 7, 'I105', 'WAITING', '2026-10-10T11:16:00Z', NULL),
+(60, NULL, 8, 'E108', 'WAITING', '2026-10-10T11:17:00Z', NULL);

@@ -35,7 +35,7 @@ CREATE TABLE "tickets" (
     "id_counter" INTEGER,
     "id_service" INTEGER NOT NULL,
     "code" TEXT NOT NULL,
-    "status" TEXT NOT NULL CHECK("status" IN ('WAITING', 'SERVED')),
+    "status" TEXT NOT NULL CHECK("status" IN ('WAITING', 'SERVING', 'SERVED')),
     "issue_at" TEXT NOT NULL,
     "served_at" TEXT,
     PRIMARY KEY("id" AUTOINCREMENT),
