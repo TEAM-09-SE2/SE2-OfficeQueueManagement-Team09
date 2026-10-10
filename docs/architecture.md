@@ -735,5 +735,5 @@ flowchart LR
 - services: **id**, name, processing_time
 - counters_services: **id**, *id_counter*, *id_service*
 - tickets: **id**, code, *id_service*, *id_counter*, issue_at, served_at, status  
-  Note: status can be WAITING or SERVED
+  Note: status can be WAITING, SERVING or SERVED
 - users: **id**, username, type, password, salt
