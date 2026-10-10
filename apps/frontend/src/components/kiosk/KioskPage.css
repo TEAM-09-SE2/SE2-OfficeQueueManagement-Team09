@@ -15,19 +15,19 @@
 }
 
 .kiosk__title {
-  font-size: clamp(2.25rem, 5vw, 3.5rem);
+  font-size: clamp(2.5rem, 6vw, 4rem);
   font-weight: 800;
 }
 
 .kiosk__subtitle {
-  max-width: 26rem;
-  font-size: 1.125rem;
+  max-width: 34rem;
+  font-size: 1.5rem;
   color: var(--color-on-brand-muted);
 }
 
 .kiosk__services {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.25rem;
   width: 100%;
   max-width: 1200px;
@@ -39,7 +39,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.5rem;
-  padding: 1.5rem;
+  padding: 1.75rem;
   text-align: left;
   font: inherit;
   color: inherit;
@@ -57,30 +57,30 @@
 .service-card__icon {
   display: grid;
   place-items: center;
-  width: 3.25rem;
-  height: 3.25rem;
+  width: 4rem;
+  height: 4rem;
   margin-bottom: 0.75rem;
-  font-size: 1.5rem;
+  font-size: 2rem;
   border-radius: var(--radius-md);
 }
 
 .service-card__name {
   font-family: var(--font-heading);
-  font-size: 1.25rem;
+  font-size: 1.625rem;
   font-weight: 800;
 }
 
 .service-card__description {
-  font-size: 0.875rem;
+  font-size: 1.125rem;
   color: var(--color-on-brand-muted);
 }
 
 .service-card__time {
   margin-top: auto;
   padding-top: 0.75rem;
-  font-size: 0.75rem;
+  font-size: 1rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--color-on-brand-muted);
 }
@@ -91,14 +91,14 @@
   align-items: center;
   gap: 0.75rem;
   margin-top: 3rem;
-  padding: 3rem 4rem;
+  padding: 3rem clamp(1.5rem, 6vw, 4rem);
   color: var(--color-brand-900);
   background: #fff;
   border-radius: var(--radius-lg);
 }
 
 .ticket__label {
-  font-size: 0.875rem;
+  font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -106,9 +106,14 @@
 
 .ticket__code {
   font-family: var(--font-heading);
-  font-size: 6rem;
+  font-size: clamp(5rem, 18vw, 9rem);
   font-weight: 800;
   line-height: 1;
+}
+
+.ticket__service {
+  font-size: 1.75rem;
+  font-weight: 600;
 }
 
 .ticket__done {
