@@ -732,7 +732,7 @@ flowchart LR
 ## 5. DB schema
 
 - counters: **id**, number
-- services: **id**, name, processing_time
+- services: **id**, name, processing_time, code, current_number, last_ticket_date
 - counters_services: **id**, *id_counter*, *id_service*
 - tickets: **id**, code, *id_service*, *id_counter*, issue_at, served_at, status  
   Note: status can be WAITING, SERVING or SERVED
