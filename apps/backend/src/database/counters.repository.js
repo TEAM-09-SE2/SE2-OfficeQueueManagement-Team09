@@ -38,12 +38,19 @@ function findServicesByCounter(counterId) {
  lowest service id.
  3. From that queue, take the ticket issued first.
 
- The chosen ticket is marked as SERVED and gets the calling counter and the call 
+ The chosen ticket is marked as SERVING and gets the calling counter and the call 
  time, which removes it from its queue. 
+
+ Before that, the ticket the counter was serving until now (if any) is marked as
+ SERVED, so a counter never has more than one SERVING ticket. This happens even
+ when all the queues are empty and no new ticket is called.
  */
 function callNextTicket(counterId, servedAt) {
-  const query = `UPDATE tickets
-     SET status = 'SERVED', id_counter = ?, served_at = ?
+  const closeQuery = `UPDATE tickets
+     SET status = 'SERVED'
+     WHERE id_counter = ? AND status = 'SERVING'`;
+  const callQuery = `UPDATE tickets
+     SET status = 'SERVING', id_counter = ?, served_at = ?
      WHERE id = (
        SELECT t.id
        FROM tickets t
@@ -64,12 +71,21 @@ function callNextTicket(counterId, servedAt) {
      RETURNING id, code, id_service, id_counter, issue_at, served_at, status,
        (SELECT name FROM services WHERE id = tickets.id_service) AS service_name`;
   return new Promise((resolve, reject) => {
-    db.get(query, [counterId, servedAt, counterId], (err, row) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(row);
-      }
+    // serialize runs the two statements one right after the other, with no
+    // other query in between.
+    db.serialize(() => {
+      db.run(closeQuery, [counterId], (err) => {
+        if (err) {
+          reject(err);
+        }
+      });
+      db.get(callQuery, [counterId, servedAt, counterId], (err, row) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(row);
+        }
+      });
     });
   });
 }

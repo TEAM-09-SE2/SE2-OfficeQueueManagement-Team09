@@ -175,7 +175,7 @@ flowchart LR
       "id_counter": 1,
       "issue_at": "2026-10-08T09:30:00Z",
       "served_at": "2026-10-08T09:45:00Z",
-      "status": "SERVED",
+      "status": "SERVING",
       "service_name": "shipping"
     }
     ```
@@ -782,5 +782,5 @@ flowchart LR
 - services: **id**, name, processing_time
 - counters_services: **id**, *id_counter*, *id_service*
 - tickets: **id**, code, *id_service*, *id_counter*, issue_at, served_at, status  
-  Note: status can be WAITING or SERVED
+  Note: status can be WAITING, SERVING or SERVED. A ticket is WAITING when issued, becomes SERVING when a counter calls it, and becomes SERVED when the same counter calls its next ticket.
 - users: **id**, username, type, password, salt
