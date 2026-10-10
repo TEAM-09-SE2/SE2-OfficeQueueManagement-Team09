@@ -1,0 +1,16 @@
+:root {
+  --color-brand-900: #2b1d79;
+  --color-brand-700: #3a31a2;
+  --color-brand-500: #7c3aed;
+  --color-on-brand: #ffffff;
+  --color-on-brand-muted: #d9d5ff;
+  --color-accent-purple: #8b5cf6;
+  --color-accent-green: #10b981;
+  --color-accent-orange: #f59e0b;
+
+  --font-heading: "Outfit", system-ui, sans-serif;
+  --font-body: "Open Sans", system-ui, sans-serif;
+
+  --radius-md: 14px;
+  --radius-lg: 28px;
+}
