@@ -1,0 +1,152 @@
+.kiosk {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: var(--color-on-brand);
+  background: radial-gradient(
+    circle at 70% 20%,
+    var(--color-brand-700),
+    var(--color-brand-900)
+  );
+}
+
+.kiosk__title {
+  font-size: clamp(2.5rem, 6vw, 4rem);
+  font-weight: 800;
+}
+
+.kiosk__subtitle {
+  max-width: 34rem;
+  font-size: 1.5rem;
+  color: var(--color-on-brand-muted);
+}
+
+.kiosk__services {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  width: 100%;
+  max-width: 1200px;
+  margin-top: 1.5rem;
+}
+
+.service-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 1.75rem;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: var(--radius-lg);
+  background: rgb(255 255 255 / 0.1);
+}
+
+.service-card:hover,
+.service-card:focus-visible {
+  background: rgb(255 255 255 / 0.18);
+}
+
+.service-card__icon {
+  display: grid;
+  place-items: center;
+  width: 4rem;
+  height: 4rem;
+  margin-bottom: 0.75rem;
+  font-size: 2rem;
+  border-radius: var(--radius-md);
+}
+
+.service-card__name {
+  font-family: var(--font-heading);
+  font-size: 1.625rem;
+  font-weight: 800;
+}
+
+.service-card__description {
+  font-size: 1.125rem;
+  color: var(--color-on-brand-muted);
+}
+
+.service-card__time {
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-on-brand-muted);
+}
+
+.ticket {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 3rem;
+  padding: 3rem clamp(1.5rem, 6vw, 4rem);
+  color: var(--color-brand-900);
+  background: #fff;
+  border-radius: var(--radius-lg);
+}
+
+.ticket__label {
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.ticket__code {
+  font-family: var(--font-heading);
+  font-size: clamp(5rem, 18vw, 9rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.ticket__service {
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.ticket__done {
+  margin-top: 1.5rem;
+  padding: 0.875rem 2.5rem;
+  font: inherit;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: var(--color-brand-500);
+}
+
+.kiosk__message {
+  min-height: 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.kiosk__retry {
+  padding: 0.875rem 2.5rem;
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-brand-900);
+  cursor: pointer;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.service-card:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

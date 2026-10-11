@@ -79,7 +79,7 @@ flowchart LR
     ```json
     {
       "id": 1,
-      "code": "A101",
+      "code": "A000",
       "id_service": 1,
       "id_counter": null,
       "issue_at": "2026-10-08T09:30:00Z",
@@ -103,6 +103,24 @@ flowchart LR
         "error": {
           "code": "SERVICE_NOT_FOUND",
           "message": "Service not found."
+        }
+      }
+      ```
+    - **409 Conflict** (no counter handles the service):
+      ```json
+      {
+        "error": {
+          "code": "SERVICE_NOT_AVAILABLE",
+          "message": "This service is not handled by any counter."
+        }
+      }
+      ```
+    - **409 Conflict** (every code of the service, 000 to 999, is in use):
+      ```json
+      {
+        "error": {
+          "code": "QUEUE_FULL",
+          "message": "The queue for this service is full. Please try again later."
         }
       }
       ```
@@ -170,7 +188,7 @@ flowchart LR
     ```json
     {
       "id": 1,
-      "code": "A101",
+      "code": "A000",
       "id_service": 1,
       "id_counter": 1,
       "issue_at": "2026-10-08T09:30:00Z",
@@ -228,7 +246,7 @@ flowchart LR
     [
       {
         "id_counter": 1,
-        "ticket_code": "A101",
+        "ticket_code": "A000",
         "service_name": "shipping"
       },
       {
@@ -736,7 +754,7 @@ flowchart LR
   - **Response (200 OK)**:
     ```json
     {
-      "ticket_code": "A101",
+      "ticket_code": "A004",
       "id_service": 1,
       "people_in_queue": 4,
       "estimated_waiting_time_minutes": 15.83
@@ -782,5 +800,5 @@ flowchart LR
 - services: **id**, name, processing_time, code, current_number, last_ticket_date
 - counters_services: **id**, *id_counter*, *id_service*
 - tickets: **id**, code, *id_service*, *id_counter*, issue_at, served_at, status  
-  Note: status can be WAITING, SERVING, SERVED or EXPIRED. A ticket is WAITING when issued, becomes SERVING when a counter calls it, and becomes SERVED when the same counter calls its next ticket. At the end of the day, if the ticket is still in the WAITING state, it becomes EXPIRED. 
+  Note: status can be WAITING, SERVING, SERVED or EXPIRED. A ticket is WAITING when issued, becomes SERVING when a counter calls it, and becomes SERVED when the same counter calls its next ticket. At the end of the day, if the ticket is still in the WAITING state, it becomes EXPIRED (it was never called), and a ticket still SERVING becomes SERVED; EXPIRED tickets are not counted as served in the stats.
 - users: **id**, username, type, password, salt
