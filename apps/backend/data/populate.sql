@@ -47,8 +47,8 @@ INSERT INTO counters_services (id_counter, id_service) VALUES (5, 9);
 INSERT INTO counters_services (id_counter, id_service) VALUES (6, 1);
 INSERT INTO counters_services (id_counter, id_service) VALUES (6, 9);
 
--- 4. Insert 63 Tickets
--- (2026-10-08: 40 SERVED tickets and 3 EXPIRED tickets;
+-- 4. Insert 70 Tickets
+-- (2026-10-08: 40 SERVED tickets; 2026-10-09: 10 EXPIRED tickets;
 --  2026-10-10: 5 SERVING tickets currently at counters and 15 WAITING tickets)
 -- Ticket codes restart from 000 every day for each service.
 -- Note: the server resets the queues every day, so when it starts on a later day
@@ -97,14 +97,8 @@ INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_
 (39, 1, 7, 'I002', 'SERVED', '2026-10-08T11:00:00Z', '2026-10-08T11:08:00Z'),
 (40, 4, 8, 'E005', 'SERVED', '2026-10-08T11:05:00Z', '2026-10-08T11:11:20Z');
 
--- 3 Expired Tickets (still waiting when the queues were reset at the end of 2026-10-08,
--- so they were never called: no counter and served_at is NULL)
-INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES
-(61, NULL, 1, 'A006', 'EXPIRED', '2026-10-08T11:20:00Z', NULL),
-(62, NULL, 4, 'B006', 'EXPIRED', '2026-10-08T11:25:00Z', NULL),
-(63, NULL, 9, 'G007', 'EXPIRED', '2026-10-08T11:30:00Z', NULL);
 
--- 5 Serving Tickets (served_at matches the moment the ticket was called to the counter)
+-- 5 Serving Tickets
 INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
 (41, 1, 1, 'A000', 'SERVING', '2026-10-10T10:45:00Z', '2026-10-10T11:00:00Z'),
 (42, 2, 4, 'B000', 'SERVING', '2026-10-10T10:50:00Z', '2026-10-10T11:02:15Z'),
@@ -112,7 +106,7 @@ INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_
 (44, 4, 8, 'E000', 'SERVING', '2026-10-10T10:55:00Z', '2026-10-10T11:08:00Z'),
 (45, 6, 9, 'G000', 'SERVING', '2026-10-10T10:58:00Z', '2026-10-10T11:10:45Z');
 
--- 15 Waiting Tickets (served_at is NULL while waiting in queue)
+-- 15 Waiting Tickets
 INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
 (46, NULL, 1, 'A001', 'WAITING', '2026-10-10T11:00:00Z', NULL),
 (47, NULL, 2, 'C000', 'WAITING', '2026-10-10T11:01:00Z', NULL),
@@ -129,3 +123,16 @@ INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_
 (58, NULL, 5, 'D001', 'WAITING', '2026-10-10T11:15:00Z', NULL),
 (59, NULL, 7, 'I001', 'WAITING', '2026-10-10T11:16:00Z', NULL),
 (60, NULL, 8, 'E001', 'WAITING', '2026-10-10T11:17:00Z', NULL);
+
+-- 10 Expired Tickets
+INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
+(61, NULL, 1, 'A000', 'EXPIRED', '2026-10-09T09:00:00Z', NULL),
+(62, NULL, 4, 'B000', 'EXPIRED', '2026-10-09T09:15:00Z', NULL),
+(63, NULL, 2, 'C000', 'EXPIRED', '2026-10-09T09:30:00Z', NULL),
+(64, NULL, 5, 'D000', 'EXPIRED', '2026-10-09T09:45:00Z', NULL),
+(65, NULL, 8, 'E000', 'EXPIRED', '2026-10-09T10:00:00Z', NULL),
+(66, NULL, 3, 'F000', 'EXPIRED', '2026-10-09T10:15:00Z', NULL),
+(67, NULL, 9, 'G000', 'EXPIRED', '2026-10-09T10:30:00Z', NULL),
+(68, NULL, 6, 'H000', 'EXPIRED', '2026-10-09T10:45:00Z', NULL),
+(69, NULL, 7, 'I000', 'EXPIRED', '2026-10-09T11:00:00Z', NULL),
+(70, NULL, 10, 'J000', 'EXPIRED', '2026-10-09T11:15:00Z', NULL);

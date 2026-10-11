@@ -800,5 +800,5 @@ flowchart LR
 - services: **id**, name, processing_time, code, current_number, last_ticket_date
 - counters_services: **id**, *id_counter*, *id_service*
 - tickets: **id**, code, *id_service*, *id_counter*, issue_at, served_at, status  
-  Note: status can be WAITING, SERVING, SERVED or EXPIRED. A ticket is WAITING when issued, becomes SERVING when a counter calls it, and becomes SERVED when the same counter calls its next ticket. A ticket becomes EXPIRED when the queues are reset while it is still WAITING (it was never called); EXPIRED tickets are not counted as served in the stats.
+  Note: status can be WAITING, SERVING, SERVED or EXPIRED. A ticket is WAITING when issued, becomes SERVING when a counter calls it, and becomes SERVED when the same counter calls its next ticket. At the end of the day, if the ticket is still in the WAITING state, it becomes EXPIRED (it was never called), and a ticket still SERVING becomes SERVED; EXPIRED tickets are not counted as served in the stats.
 - users: **id**, username, type, password, salt
