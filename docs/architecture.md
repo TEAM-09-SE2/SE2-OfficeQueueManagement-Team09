@@ -118,6 +118,52 @@ flowchart LR
 
 ### Next customer
 
+- **GET /api/counters/{id}/services**: returns the services that the counter can handle.
+  - **Request Body**: *None*
+  - **Response (200 OK)**:
+    ```json
+    [
+      {
+        "id": 1,
+        "name": "shipping",
+        "processing_time": 5
+      },
+      {
+        "id": 2,
+        "name": "accounts",
+        "processing_time": 3
+      }
+    ]
+    ```
+  - **Error Responses**:
+    - **400 Bad Request**:
+      ```json
+      {
+        "error": {
+          "code": "INVALID_INPUT",
+          "message": "Invalid counter ID supplied."
+        }
+      }
+      ```
+    - **404 Not Found**:
+      ```json
+      {
+        "error": {
+          "code": "COUNTER_NOT_FOUND",
+          "message": "Counter not found."
+        }
+      }
+      ```
+    - **500 Internal Server Error**:
+      ```json
+      {
+        "error": {
+          "code": "INTERNAL_SERVER_ERROR",
+          "message": "Internal server error occurred while retrieving counter services."
+        }
+      }
+      ```
+
 - **POST /api/counters/{id}/next**: returns the next ticket code that will be served.
   - **Request Body**: *None*
   - **Response (200 OK)**:
@@ -129,7 +175,8 @@ flowchart LR
       "id_counter": 1,
       "issue_at": "2026-10-08T09:30:00Z",
       "served_at": "2026-10-08T09:45:00Z",
-      "status": "SERVED"
+      "status": "SERVING",
+      "service_name": "shipping"
     }
     ```
   - **Response (204 No Content)**:
@@ -735,5 +782,5 @@ flowchart LR
 - services: **id**, name, processing_time, code, current_number, last_ticket_date
 - counters_services: **id**, *id_counter*, *id_service*
 - tickets: **id**, code, *id_service*, *id_counter*, issue_at, served_at, status  
-  Note: status can be WAITING, SERVING or SERVED
+  Note: status can be WAITING, SERVING or SERVED. A ticket is WAITING when issued, becomes SERVING when a counter calls it, and becomes SERVED when the same counter calls its next ticket.
 - users: **id**, username, type, password, salt
