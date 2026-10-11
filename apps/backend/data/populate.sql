@@ -5,27 +5,31 @@ DELETE FROM services;
 DELETE FROM counters;
 
 -- 1. Insert 6 Counters
-INSERT INTO counters (id, number) VALUES (1, 1);
-INSERT INTO counters (id, number) VALUES (2, 2);
-INSERT INTO counters (id, number) VALUES (3, 3);
-INSERT INTO counters (id, number) VALUES (4, 4);
-INSERT INTO counters (id, number) VALUES (5, 5);
-INSERT INTO counters (id, number) VALUES (6, 6);
+INSERT INTO counters (id, number) VALUES 
+(1, 1), 
+(2, 2), 
+(3, 3), 
+(4, 4), 
+(5, 5), 
+(6, 6);
 
 -- 2. Insert 10 Services (processing_time in minutes)
 -- Note: Service ID 10 ('Historical Archives') is intentionally not associated with any counter
-INSERT INTO services (id, name, processing_time) VALUES (1, 'Parcel Shipping', 5);
-INSERT INTO services (id, name, processing_time) VALUES (2, 'Bill Payment', 3);
-INSERT INTO services (id, name, processing_time) VALUES (3, 'Registered Mail Pickup', 4);
-INSERT INTO services (id, name, processing_time) VALUES (4, 'Change of Address', 10);
-INSERT INTO services (id, name, processing_time) VALUES (5, 'Account Opening', 15);
-INSERT INTO services (id, name, processing_time) VALUES (6, 'Mortgage Consultation', 20);
-INSERT INTO services (id, name, processing_time) VALUES (7, 'Digital ID Issuance', 8);
-INSERT INTO services (id, name, processing_time) VALUES (8, 'ID Card Request', 6);
-INSERT INTO services (id, name, processing_time) VALUES (9, 'General Information', 2);
-INSERT INTO services (id, name, processing_time) VALUES (10, 'Historical Archives', 12);
+INSERT INTO services (id, name, processing_time, code, current_number, last_ticket_date) VALUES 
+(1, 'Parcel Shipping', 5, 'A', 109, '2026-10-10'),
+(2, 'Bill Payment', 3, 'C', 105, '2026-10-10'),
+(3, 'Registered Mail Pickup', 4, 'F', 105, '2026-10-10'),
+(4, 'Change of Address', 10, 'B', 108, '2026-10-10'),
+(5, 'Account Opening', 15, 'D', 105, '2026-10-10'),
+(6, 'Mortgage Consultation', 20, 'H', 104, '2026-10-10'),
+(7, 'Digital ID Issuance', 8, 'I', 105, '2026-10-10'),
+(8, 'ID Card Request', 6, 'E', 108, '2026-10-10'),
+(9, 'General Information', 2, 'G', 109, '2026-10-10'),
+(10, 'Historical Archives', 12, 'J', 102, '2026-10-10');
 
 -- 3. Association between Counters and Services
+-- Note: The surrogate 'id' column is omitted so SQLite AUTOINCREMENT generates it automatically.
+
 -- Counter 1: provides multiple services (1, 2, 3, 7)
 INSERT INTO counters_services (id_counter, id_service) VALUES (1, 1);
 INSERT INTO counters_services (id_counter, id_service) VALUES (1, 2);
@@ -44,9 +48,9 @@ INSERT INTO counters_services (id_counter, id_service) VALUES (6, 1);
 INSERT INTO counters_services (id_counter, id_service) VALUES (6, 9);
 
 -- 4. Insert 60 Tickets
--- (40 SERVED tickets, 5 SERVING tickets currently at counters, 15 WAITING tickets)
+-- (40 SERVED tickets, 5 SERVING tickets currently at counters, 15 WAITING tickets, 10 EXPIRED tickets)
 
--- 40 Served Tickets (served_at indica il momento della presa in carico allo sportello)
+-- 40 Served Tickets
 INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
 (1, 1, 1, 'A101', 'SERVED', '2026-10-08T08:30:00Z', '2026-10-08T08:32:10Z'),
 (2, 2, 4, 'B101', 'SERVED', '2026-10-08T08:31:00Z', '2026-10-08T08:35:00Z'),
@@ -89,7 +93,7 @@ INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_
 (39, 1, 7, 'I103', 'SERVED', '2026-10-08T11:00:00Z', '2026-10-08T11:08:00Z'),
 (40, 4, 8, 'E106', 'SERVED', '2026-10-08T11:05:00Z', '2026-10-08T11:11:20Z');
 
--- 5 Serving Tickets (served_at valorizzato al momento della chiamata allo sportello)
+-- 5 Serving Tickets
 INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
 (41, 1, 1, 'A107', 'SERVING', '2026-10-10T10:45:00Z', '2026-10-10T11:00:00Z'),
 (42, 2, 4, 'B107', 'SERVING', '2026-10-10T10:50:00Z', '2026-10-10T11:02:15Z'),
@@ -97,7 +101,7 @@ INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_
 (44, 4, 8, 'E107', 'SERVING', '2026-10-10T10:55:00Z', '2026-10-10T11:08:00Z'),
 (45, 6, 9, 'G108', 'SERVING', '2026-10-10T10:58:00Z', '2026-10-10T11:10:45Z');
 
--- 15 Waiting Tickets (served_at rimane NULL)
+-- 15 Waiting Tickets
 INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
 (46, NULL, 1, 'A108', 'WAITING', '2026-10-10T11:00:00Z', NULL),
 (47, NULL, 2, 'C104', 'WAITING', '2026-10-10T11:01:00Z', NULL),
@@ -114,3 +118,16 @@ INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_
 (58, NULL, 5, 'D105', 'WAITING', '2026-10-10T11:15:00Z', NULL),
 (59, NULL, 7, 'I105', 'WAITING', '2026-10-10T11:16:00Z', NULL),
 (60, NULL, 8, 'E108', 'WAITING', '2026-10-10T11:17:00Z', NULL);
+
+-- 10 Expired Tickets
+INSERT INTO tickets (id, id_counter, id_service, code, status, issue_at, served_at) VALUES 
+(61, NULL, 1, 'A110', 'EXPIRED', '2026-10-09T09:00:00Z', NULL),
+(62, NULL, 4, 'B109', 'EXPIRED', '2026-10-09T09:15:00Z', NULL),
+(63, NULL, 2, 'C106', 'EXPIRED', '2026-10-09T09:30:00Z', NULL),
+(64, NULL, 5, 'D106', 'EXPIRED', '2026-10-09T09:45:00Z', NULL),
+(65, NULL, 8, 'E109', 'EXPIRED', '2026-10-09T10:00:00Z', NULL),
+(66, NULL, 3, 'F106', 'EXPIRED', '2026-10-09T10:15:00Z', NULL),
+(67, NULL, 9, 'G110', 'EXPIRED', '2026-10-09T10:30:00Z', NULL),
+(68, NULL, 6, 'H105', 'EXPIRED', '2026-10-09T10:45:00Z', NULL),
+(69, NULL, 7, 'I106', 'EXPIRED', '2026-10-09T11:00:00Z', NULL),
+(70, NULL, 10, 'J103', 'EXPIRED', '2026-10-09T11:15:00Z', NULL);
