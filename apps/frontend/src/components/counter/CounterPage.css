@@ -90,7 +90,7 @@
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #8b8ba7;
+  color: #6b6b8a;
 }
 
 .counter__main {
@@ -307,12 +307,12 @@
   cursor: pointer;
   border: 0;
   border-radius: 22px;
-  background: var(--color-accent-purple);
+  background: var(--color-brand-500);
   box-shadow: 0 12px 24px rgb(124 58 237 / 0.45);
 }
 
 .serving-card__next:hover {
-  background: var(--color-brand-500);
+  background: var(--color-brand-700);
 }
 
 .serving-card__next:focus-visible {
@@ -320,7 +320,8 @@
   outline-offset: 3px;
 }
 
-.serving-card__next:disabled {
+/* Not the disabled attribute: a disabled button would lose the keyboard focus. */
+.serving-card__next[aria-disabled="true"] {
   cursor: progress;
   opacity: 0.7;
 }
@@ -358,7 +359,7 @@
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: #8b8ba7;
+  color: #6b6b8a;
 }
 
 .services-card__value {

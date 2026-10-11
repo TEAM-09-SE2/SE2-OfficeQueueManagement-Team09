@@ -79,7 +79,7 @@ function ServingCard({ ticket, serviceTime, message, calling, onCallNext }) {
         type="button"
         className="serving-card__next"
         onClick={onCallNext}
-        disabled={calling}
+        aria-disabled={calling}
         aria-busy={calling}
       >
         <span>{calling ? "Calling…" : "Next ticket"}</span>

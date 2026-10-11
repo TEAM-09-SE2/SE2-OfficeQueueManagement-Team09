@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import Logo from "../Logo";
 import { callNextCustomer } from "../../api/counters";
@@ -13,6 +13,8 @@ function CounterPage() {
   const { id } = useParams();
   const counter = useCounter(id);
   const [calling, setCalling] = useState(false);
+  // Synchronous guard: ignores a second press while the first call is running.
+  const callingRef = useRef(false);
   // Shown in the card: { type: "info" | "error", text }
   const [message, setMessage] = useState(null);
   // Read aloud by screen readers when the officer calls the next customer.
@@ -20,6 +22,10 @@ function CounterPage() {
   const counterLabel = String(id).padStart(2, "0");
 
   async function handleCallNext() {
+    if (callingRef.current) {
+      return;
+    }
+    callingRef.current = true;
     setCalling(true);
     setMessage(null);
     try {
@@ -36,6 +42,7 @@ function CounterPage() {
     } catch (err) {
       setMessage({ type: "error", text: err.message });
     } finally {
+      callingRef.current = false;
       setCalling(false);
     }
   }
