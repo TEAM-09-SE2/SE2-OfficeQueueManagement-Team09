@@ -1,0 +1,78 @@
+/* The board is a TV: everything must fit in one screen, with no scrolling. */
+.display {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 2vh;
+  padding: 3vh 3vw;
+  overflow: hidden;
+  color: var(--color-on-brand);
+  background: radial-gradient(
+    circle at 70% 20%,
+    var(--color-brand-700),
+    var(--color-brand-900)
+  );
+}
+
+.display__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.display__title {
+  font-size: clamp(2rem, 5vh, 4rem);
+  font-weight: 800;
+}
+
+.display__grid {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  grid-auto-rows: 1fr;
+  gap: 2vh;
+}
+
+.call-card {
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1vh;
+  padding: 2vh 1rem;
+  text-align: center;
+  color: var(--color-brand-900);
+  background: #fff;
+  border-radius: var(--radius-lg);
+  /* lets the ticket code size itself on the card width (cqi units) */
+  container-type: inline-size;
+}
+
+.call-card__counter {
+  font-size: clamp(1.25rem, 3.5vh, 2.5rem);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.call-card__code {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, min(16vh, 28cqi), 11rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.call-card__service {
+  font-size: clamp(1.25rem, 3.5vh, 2.5rem);
+  font-weight: 600;
+}
+
+/* A free counter is shown as an outlined card, not only with a different
+   colour, so it is recognisable for colour-blind people too. */
+.call-card--free {
+  color: var(--color-on-brand);
+  background: transparent;
+  border: 3px dashed rgb(255 255 255 / 0.6);
+}

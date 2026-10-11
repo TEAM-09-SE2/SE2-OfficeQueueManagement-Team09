@@ -1,9 +1,13 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import DisplayPage from "./components/display/DisplayPage";
+
 function App() {
   return (
-    <main className="app-shell">
-      <h1>Office Queue Management</h1>
-      <p>Project scaffold ready.</p>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/display" element={<DisplayPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
