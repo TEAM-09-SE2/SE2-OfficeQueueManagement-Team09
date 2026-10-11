@@ -127,3 +127,9 @@
     animation: none;
   }
 }
+
+.display__offline {
+  font-size: clamp(1rem, 2.5vh, 1.75rem);
+  font-weight: 600;
+  text-align: center;
+}

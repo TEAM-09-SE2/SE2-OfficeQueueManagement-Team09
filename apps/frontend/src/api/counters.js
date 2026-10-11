@@ -25,3 +25,10 @@ export async function getCurrentTicket(counterId, signal) {
   }
   return { code: call.ticket_code, service_name: call.service_name };
 }
+
+// GET /api/counters/current: one row per counter with the ticket it is serving
+// ({ id_counter, ticket_code, service_name }). ticket_code and service_name
+// are null when the counter is free.
+export function getCurrentCalls(signal) {
+  return apiRequest("/api/counters/current", { signal });
+}

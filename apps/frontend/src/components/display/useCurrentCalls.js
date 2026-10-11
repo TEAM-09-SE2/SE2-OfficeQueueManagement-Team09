@@ -1,23 +1,37 @@
 import { useEffect, useState } from "react";
-import { currentCalls, simulateCall } from "../../pages/currentCalls";
+import { getCurrentCalls } from "../../api/counters";
 
-const FAKE_CALL_INTERVAL_MS = 10000;
+const REFRESH_INTERVAL_MS = 3000;
 
-// Returns the ticket each counter is serving, kept up to date.
-// TODO: when GET /api/counters/current is available, load the calls from it
-// every few seconds instead of simulating them. The page does not change.
+// Returns the ticket each counter is serving, reloaded every few seconds
+// because nobody touches the board. While the backend cannot be reached,
+// `offline` is true and the last calls received stay on screen.
 export function useCurrentCalls() {
-  const [state, setState] = useState({ calls: currentCalls, step: 0 });
+  const [calls, setCalls] = useState([]);
+  const [offline, setOffline] = useState(false);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      setState(({ calls, step }) => ({
-        calls: simulateCall(calls, step + 1),
-        step: step + 1,
-      }));
-    }, FAKE_CALL_INTERVAL_MS);
-    return () => clearInterval(timer);
+    const controller = new AbortController();
+
+    async function refresh() {
+      try {
+        const rows = await getCurrentCalls(controller.signal);
+        setCalls(rows);
+        setOffline(false);
+      } catch (err) {
+        if (err.name !== "AbortError") {
+          setOffline(true);
+        }
+      }
+    }
+
+    refresh();
+    const timer = setInterval(refresh, REFRESH_INTERVAL_MS);
+    return () => {
+      controller.abort();
+      clearInterval(timer);
+    };
   }, []);
 
-  return state.calls;
+  return { calls, offline };
 }

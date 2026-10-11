@@ -8,7 +8,7 @@ import "./DisplayPage.css";
 const HIGHLIGHT_MS = 8000;
 
 function DisplayPage() {
-  const counters = useCurrentCalls();
+  const { calls: counters, offline } = useCurrentCalls();
 
   const [calledIds, setCalledIds] = useState([]);
   const [soundOn, setSoundOn] = useState(false);
@@ -22,9 +22,13 @@ function DisplayPage() {
   // A counter whose ticket code changed has just called a customer:
   // highlight its card for a while and play the chime.
   useEffect(() => {
+    if (counters.length === 0) {
+      // Nothing loaded yet.
+      return;
+    }
     const previous = previousCodes.current;
     previousCodes.current = new Map(
-      counters.map((counter) => [counter.id_counter, counter.ticket_code])
+      counters.map((counter) => [counter.id_counter, counter.ticket_code]),
     );
     if (previous === null) {
       // First load: these tickets were called before the board was opened.
@@ -35,7 +39,7 @@ function DisplayPage() {
       .filter(
         (counter) =>
           counter.ticket_code !== null &&
-          previous.get(counter.id_counter) !== counter.ticket_code
+          previous.get(counter.id_counter) !== counter.ticket_code,
       )
       .map((counter) => counter.id_counter);
     if (newlyCalled.length === 0) {
@@ -82,6 +86,11 @@ function DisplayPage() {
           />
         ))}
       </section>
+      {offline && (
+        <p className="display__offline" role="status">
+          Connection lost. Retrying…
+        </p>
+      )}
     </main>
   );
 }
