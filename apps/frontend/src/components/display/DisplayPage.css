@@ -25,6 +25,18 @@
   font-weight: 800;
 }
 
+.display__sound {
+  padding: 0.75rem 1.5rem;
+  font: inherit;
+  font-size: clamp(1rem, 2.5vh, 1.5rem);
+  font-weight: 600;
+  color: var(--color-brand-900);
+  cursor: pointer;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
 .display__grid {
   flex: 1;
   min-height: 0;
@@ -48,6 +60,7 @@
   border-radius: var(--radius-lg);
   /* lets the ticket code size itself on the card width (cqi units) */
   container-type: inline-size;
+  position: relative;
 }
 
 .call-card__counter {
@@ -75,4 +88,42 @@
   color: var(--color-on-brand);
   background: transparent;
   border: 3px dashed rgb(255 255 255 / 0.6);
+}
+
+/* A counter that has just called a customer. The "Now calling" badge and the
+   thick outline make it stand out without relying on colour alone. */
+.call-card--called {
+  outline: 1.2vh solid var(--color-accent-orange);
+  animation: call-card-pulse 1s ease-in-out infinite alternate;
+}
+
+.call-card__badge {
+  position: absolute;
+  top: 1.5vh;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 0.5vh 1.5rem;
+  font-size: clamp(1rem, 2.8vh, 2rem);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  background: var(--color-brand-900);
+  border-radius: 999px;
+}
+
+@keyframes call-card-pulse {
+  from {
+    outline-offset: 0;
+  }
+  to {
+    outline-offset: 0.8vh;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .call-card--called {
+    animation: none;
+  }
 }
