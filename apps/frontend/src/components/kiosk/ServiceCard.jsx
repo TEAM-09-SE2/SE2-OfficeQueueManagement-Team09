@@ -1,8 +1,9 @@
-function ServiceCard({ service, meta, onSelect }) {
+function ServiceCard({ service, meta, disabled, onSelect }) {
   return (
     <button
       type="button"
       className="service-card"
+      disabled={disabled}
       onClick={() => onSelect(service)}
     >
       <span

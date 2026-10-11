@@ -1,7 +1,8 @@
 // Calls the backend API. In development the Vite server forwards /api to the
 // backend (see vite.config.js), so paths are relative.
 
-const UNREACHABLE_MESSAGE = "Cannot reach the server. Check that the backend is running.";
+const UNREACHABLE_MESSAGE =
+  "Cannot reach the server. Check that the backend is running.";
 
 // Error returned by the API ({ error: { code, message } }), or a network error
 // (status 0) when the backend cannot be reached.
@@ -14,10 +15,17 @@ export class ApiError extends Error {
 }
 
 // Returns the JSON body, or null for an empty response (204).
-export async function apiRequest(path, { method = "GET", signal } = {}) {
+export async function apiRequest(path, { method = "GET", data, signal } = {}) {
   let response;
   try {
-    response = await fetch(path, { method, signal });
+    response = await fetch(path, {
+      method,
+      signal,
+      // data, when given, is sent as the JSON body of the request.
+      headers:
+        data === undefined ? undefined : { "Content-Type": "application/json" },
+      body: data === undefined ? undefined : JSON.stringify(data),
+    });
   } catch (err) {
     if (err.name === "AbortError") {
       throw err;
@@ -39,7 +47,8 @@ export async function apiRequest(path, { method = "GET", signal } = {}) {
     throw new ApiError(
       response.status,
       body?.error?.code ?? "UNKNOWN_ERROR",
-      body?.error?.message ?? `The server answered with error ${response.status}.`,
+      body?.error?.message ??
+        `The server answered with error ${response.status}.`,
     );
   }
   return body;

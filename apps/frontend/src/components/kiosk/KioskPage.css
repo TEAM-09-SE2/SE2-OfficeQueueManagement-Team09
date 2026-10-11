@@ -127,3 +127,26 @@
   border-radius: var(--radius-md);
   background: var(--color-brand-500);
 }
+
+.kiosk__message {
+  min-height: 2rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.kiosk__retry {
+  padding: 0.875rem 2.5rem;
+  font: inherit;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--color-brand-900);
+  cursor: pointer;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: #fff;
+}
+
+.service-card:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
