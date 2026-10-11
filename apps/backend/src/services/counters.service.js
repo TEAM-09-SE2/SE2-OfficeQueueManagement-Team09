@@ -1,12 +1,5 @@
 const countersRepository = require("../database/counters.repository");
-
-class AppError extends Error {
-  constructor(status, code, message) {
-    super(message);
-    this.status = status;
-    this.code = code;
-  }
-}
+const AppError = require("../errors/AppError");
 
 async function ensureCounterExists(counterId) {
   const counter = await countersRepository.findCounterById(counterId);
