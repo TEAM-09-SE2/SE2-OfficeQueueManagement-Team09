@@ -133,6 +133,11 @@ npm run dev
 
 Frontend runs on: `http://localhost:5173`
 
+### Frontend Pages
+
+- Officer counter page (Next customer story): `http://localhost:5173/counter` asks for the counter number and opens `http://localhost:5173/counter/<number>` (each workstation can bookmark its own). The officer presses **Next ticket** to mark the current customer as served and call the next one.
+- The Vite dev server forwards `/api` requests to the backend on `http://localhost:4000`, so start the backend first.
+
 ## Available Scripts
 
 ### Frontend (`apps/frontend`)

@@ -1,9 +1,15 @@
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import CounterPage from "./components/counter/CounterPage";
+import CounterSelectPage from "./components/counter/CounterSelectPage";
+
 function App() {
   return (
-    <main className="app-shell">
-      <h1>Office Queue Management</h1>
-      <p>Project scaffold ready.</p>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/counter" element={<CounterSelectPage />} />
+        <Route path="/counter/:id" element={<CounterPage />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
