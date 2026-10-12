@@ -80,6 +80,7 @@ SE2-OfficeQueueManagement-Team09/
 
 - Node.js (latest LTS recommended)
 - npm
+- sqlite3
 
 ## Install Dependencies
 
@@ -98,6 +99,17 @@ npm install
 cd ../backend
 npm install
 ```
+
+## Create DB
+For creating the database, its schema and populate it.
+
+```bash
+cd apps/backend/data
+sqlite3 database.db ""
+sqlite3 database.db < schema.sql
+sqlite3 database.db < populate.sql
+```
+
 
 ## Run Locally
 
