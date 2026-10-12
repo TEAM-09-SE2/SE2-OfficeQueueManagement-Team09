@@ -20,9 +20,14 @@ async function callNextCustomer(counterId) {
   return ticket ?? null;
 }
 
+async function getServingTickets() {
+  return countersRepository.getServingTickets();
+}
+
 module.exports = {
   ensureCounterExists,
   getCounterServices,
   callNextCustomer,
+  getServingTickets,
   AppError,
 };

@@ -90,8 +90,27 @@ function callNextTicket(counterId, servedAt) {
   });
 }
 
+// One row per counter, with the ticket it is serving (NULL if it is free).
+function getServingTickets() {
+  const query = `SELECT c.id AS id_counter, t.code AS ticket_code, s.name AS service_name
+     FROM counters c
+     LEFT JOIN tickets t ON t.id_counter = c.id AND t.status = 'SERVING'
+     LEFT JOIN services s ON s.id = t.id_service
+     ORDER BY c.id`;
+  return new Promise((resolve, reject) => {
+    db.all(query, [], (err, rows) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(rows);
+      }
+    });
+  });
+}
+
 module.exports = {
   findCounterById,
   findServicesByCounter,
   callNextTicket,
+  getServingTickets,
 };
