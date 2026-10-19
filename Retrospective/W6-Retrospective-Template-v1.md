@@ -26,12 +26,12 @@ sections:
 
 ### Detailed statistics
 
-| Story                    | # Tasks | Points | Hours est. | Hours actual |
-| ------------------------ | ------- | ------ | ---------- | ------------ |
-| _#0_                     | 6       | -      | 27         | 28.30        |
-| Get Ticket               | 4       | 3      | 7          | 6.40         |
-| Next Customer            | 4       | 8      | 6          | 6.45         |
-| Call Customer (not done) | 4       | 2      | 6          | 6.20         |
+| Story                         | # Tasks | Points | Hours est. | Hours actual |
+| ----------------------------- | ------- | ------ | ---------- | ------------ |
+| _#0_ Uncategorized tasks      | 6       | -      | 27         | 28.30        |
+| _#1_ Get Ticket               | 4       | 3      | 7          | 6.40         |
+| _#2_ Next Customer            | 4       | 8      | 6          | 6.45         |
+| _#3_ Call Customer (not done) | 4       | 2      | 6          | 6.20         |
 
 > place technical tasks corresponding to story `#0` and leave out story points (not applicable in this case)
 
@@ -56,7 +56,7 @@ sections:
   - Total hours estimated: 3
   - Total hours spent: 3.45
   - Nr of automated unit test cases: 15
-  - Coverage
+  - Coverage: 80.4% of lines, 86.1% of branches, 81.5% of functions (all 42 backend tests, measured on `apps/backend/src`)
 - E2E testing:
   - Total hours estimated: included in the unit test hours estimation
   - Total hours spent: included in the unit test hours spent
