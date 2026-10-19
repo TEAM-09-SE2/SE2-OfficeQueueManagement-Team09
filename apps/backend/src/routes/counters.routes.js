@@ -1,10 +1,10 @@
 const express = require("express");
-const countersController = require("../controllers/counters.controller.js");
+const countersController = require("../controllers/counters.controller");
 
 const router = express.Router();
 
-//GET /api/counters/current 
 router.get("/current", countersController.getServingTickets);
+router.get("/:id/services", countersController.getCounterServices);
+router.post("/:id/next", countersController.callNextCustomer);
 
 module.exports = router;
-

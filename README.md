@@ -110,6 +110,8 @@ sqlite3 database.db < schema.sql
 sqlite3 database.db < populate.sql
 ```
 
+If the backend is running, restart it after recreating the database. Recreate the database before running the backend tests too: the server's daily reset closes the tickets the seed leaves open.
+
 
 ## Run Locally
 
@@ -133,6 +135,11 @@ npm run dev
 
 Frontend runs on: `http://localhost:5173`
 
+### Frontend Pages
+
+- Officer counter page (Next customer story): `http://localhost:5173/counter` asks for the counter number and opens `http://localhost:5173/counter/<number>` (each workstation can bookmark its own). The officer presses **Next ticket** to mark the current customer as served and call the next one.
+- The Vite dev server forwards `/api` requests to the backend on `http://localhost:4000`, so start the backend first.
+
 ## Available Scripts
 
 ### Frontend (`apps/frontend`)
@@ -145,12 +152,14 @@ Frontend runs on: `http://localhost:5173`
 
 - `npm run dev` starts Express with nodemon
 - `npm start` starts Express with node
+- `npm test` runs the backend tests
 
 ## Environment Notes
 
 - Create `apps/backend/.env` from `apps/backend/.env.example` for local configuration.
 - The SQLite database file will be created under `apps/backend/data/` when the database layer is initialized.
-- This repository currently contains only the scaffold and setup files.
+- When `schema.sql` or `populate.sql` change (e.g. the `EXPIRED` ticket status), recreate your local database with the commands in [Create DB](#create-db).
+- The backend resets the queues automatically every day at midnight (Italian time), or when it starts if it was off at midnight: tickets left from previous days are closed (still waiting → `EXPIRED`, being served → `SERVED`) and ticket numbers restart from 000 (`A000`, `A001`, … `A999`, then `A000` again). Restarting the backend during the day changes nothing.
 
 ## Figma Prototype Documentation
 

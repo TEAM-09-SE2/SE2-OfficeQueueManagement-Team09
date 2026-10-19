@@ -1,15 +1,31 @@
 body {
-  font-family: Arial, sans-serif;
-  background: #f5f5f5;
-  color: #222;
+  font-family: var(--font-body);
+  color: #1a1a2e;
 }
 
-.app-shell {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 2rem 1rem;
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
 }
 
-h1 {
-  margin-bottom: 0.75rem;
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-style: italic;
+  font-size: 1.75rem;
+}
+
+.logo__mark {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 10px;
+  background: #fff;
+  color: var(--color-brand-500);
+  font-style: normal;
 }

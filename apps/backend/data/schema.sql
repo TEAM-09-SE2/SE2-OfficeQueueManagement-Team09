@@ -16,6 +16,9 @@ CREATE TABLE "services" (
     "id" INTEGER,
     "name" TEXT NOT NULL UNIQUE,
     "processing_time" NUMERIC NOT NULL,
+    "code" TEXT NOT NULL UNIQUE,
+    "current_number" INTEGER DEFAULT NULL,
+    "last_ticket_date" TEXT DEFAULT (CURRENT_DATE) ,
     PRIMARY KEY("id" AUTOINCREMENT)
 );
 
@@ -35,7 +38,7 @@ CREATE TABLE "tickets" (
     "id_counter" INTEGER,
     "id_service" INTEGER NOT NULL,
     "code" TEXT NOT NULL,
-    "status" TEXT NOT NULL CHECK("status" IN ('WAITING', 'SERVED')),
+    "status" TEXT NOT NULL CHECK("status" IN ('WAITING', 'SERVING', 'SERVED', 'EXPIRED')),
     "issue_at" TEXT NOT NULL,
     "served_at" TEXT,
     PRIMARY KEY("id" AUTOINCREMENT),
